@@ -8,8 +8,7 @@ const { v1Routes } = require("./routes/v1");
 const { cors } = require("./config");
 const path = require("path");
 const app = express();
-const expressWinston = require("express-winston");
-const winston = require("winston");
+const { loggerError } = require("./logger");
 
 app.use(cors);
 app.use(express.json());
@@ -18,12 +17,7 @@ app.use(cookieParser());
 
 app.use("/api/v1", v1Routes);
 
-app.use(
-  expressWinston.errorLogger({
-    transports: [new winston.transports.Console()],
-    format: winston.format.combine(winston.format.colorize(), winston.format.json()),
-  })
-);
+app.use(loggerError);
 
 app.use(handle404Error);
 app.use(handleGlobalError);
